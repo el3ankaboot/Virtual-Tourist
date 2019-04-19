@@ -43,19 +43,24 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
             }
             else { //MARK: Downloading Images from Flickr
                 print("has NOO images")
-                FlickrClient.downloadImages(longitude: "\(thePin!.longitude)", latitude: "\(thePin!.latitude)", page: pageNo) { (imagesURLs, errMsg) in
-                    guard let imagesURLs = imagesURLs else {
-                        let alertVC = UIAlertController(title: errMsg , message: "", preferredStyle: .alert)
-                        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                        self.present(alertVC, animated: true)
-                        return
-                    }
-                    print("Loaded Images")
-                    self.imageURLs = imagesURLs
-                    self.pageNo += 1
-                    self.collectionView.reloadData()
-                }
+                downloadImagesFromFlickr()
             }
+        }
+    }
+    
+    //MARK: Function to Download Images:
+    func downloadImagesFromFlickr () {
+        FlickrClient.downloadImages(longitude: "\(thePin!.longitude)", latitude: "\(thePin!.latitude)", page: pageNo) { (imagesURLs, errMsg) in
+            guard let imagesURLs = imagesURLs else {
+                let alertVC = UIAlertController(title: errMsg , message: "", preferredStyle: .alert)
+                alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alertVC, animated: true)
+                return
+            }
+            print("Loaded Images")
+            self.imageURLs = imagesURLs
+            self.pageNo += 1
+            self.collectionView.reloadData()
         }
     }
     
@@ -98,6 +103,12 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
         }
         
         return cell
+    }
+    
+    //MARK: IBActions
+    
+    @IBAction func loadNewImages(_ sender: Any) {
+        self.downloadImagesFromFlickr()
     }
     
 }
