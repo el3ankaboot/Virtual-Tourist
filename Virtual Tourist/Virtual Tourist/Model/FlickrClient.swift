@@ -23,7 +23,7 @@ class FlickrClient {
         var stringValue : String {
             switch self {
             case .search(let longitude, let latitude, let page):
-                return Endpoints.baseURL + "&lat=\(latitude)&lon=\(longitude)&radius=10&format=json&nojsoncallback=1&per_page=9&page=\(page)"
+                return Endpoints.baseURL + "&lat=\(latitude)&lon=\(longitude)&radius=10&format=json&nojsoncallback=1&per_page=6&page=\(page)"
             }
         }
         

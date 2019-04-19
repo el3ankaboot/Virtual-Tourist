@@ -19,6 +19,8 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
     
     //MARK: Instance Variables
     var photos:[Photo] = []
+    var imageURLs:[ImageUrl] = []
+    var pageNo = 1
     
     //MARK: Outlets
     @IBOutlet weak var collectionView: UICollectionView!
@@ -41,14 +43,17 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
             }
             else { //MARK: Downloading Images from Flickr
                 print("has NOO images")
-                FlickrClient.downloadImages(longitude: "\(thePin!.longitude)", latitude: "\(thePin!.latitude)", page: 1) { (success, errMsg) in
-                    guard success != nil else {
+                FlickrClient.downloadImages(longitude: "\(thePin!.longitude)", latitude: "\(thePin!.latitude)", page: pageNo) { (imagesURLs, errMsg) in
+                    guard let imagesURLs = imagesURLs else {
                         let alertVC = UIAlertController(title: errMsg , message: "", preferredStyle: .alert)
                         alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                         self.present(alertVC, animated: true)
                         return
                     }
-                  print("Loaded Images")
+                    print("Loaded Images")
+                    self.imageURLs = imagesURLs
+                    self.pageNo += 1
+                    self.collectionView.reloadData()
                 }
             }
         }
@@ -57,15 +62,40 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
     
     //MARK: CollectionView stubs
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.photos.count
+        return self.imageURLs.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageReusable", for: indexPath) as! PhotoCell
-        let photo = self.photos[(indexPath as NSIndexPath).row]
+        
+        cell.image.image = UIImage(named: "Unknown")
         
         
-        cell.image?.image = UIImage(data:photo.data!,scale:1.0)
+        let url = URL(string: imageURLs[(indexPath as NSIndexPath).row].getURL())
+        let downloadQueue = DispatchQueue(label: "download", attributes: [])
+        downloadQueue.async { () -> Void in
+
+            // download Data
+            if let url = url {
+                let imgData = try? Data(contentsOf: url)
+                // Turn it into a UIImage
+                if let imgData = imgData {
+                    let image = UIImage(data: imgData)
+
+                    // display it
+                    DispatchQueue.main.async(execute: { () -> Void in
+                        if let img = image {
+                            cell.image.image = img
+                        }
+                        else {
+                            print("NO")
+                        }
+                    })
+                }
+            }
+
+
+        }
         
         return cell
     }

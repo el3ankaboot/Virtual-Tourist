@@ -24,4 +24,6 @@ class ImageUrl {
     func getURL() -> String {
         return "https://farm\(farmID).staticflickr.com/\(serverID)/\(id)_\(secret).jpg"
     }
+    
+
 }
