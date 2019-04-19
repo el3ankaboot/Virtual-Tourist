@@ -83,7 +83,6 @@
 				5E0664B92260D27A006BD894 /* View */,
 				5E0664B82260D25A006BD894 /* Controller */,
 				5E0664B02260D18A006BD894 /* Info.plist */,
-				5E0DCE88226A424A00170740 /* ImageUrl.swift */,
 			);
 			path = "Virtual Tourist";
 			sourceTree = "<group>";
@@ -112,6 +111,7 @@
 			children = (
 				5E0664A42260D184006BD894 /* AppDelegate.swift */,
 				5E0664BD2260D2BA006BD894 /* FlickrClient.swift */,
+				5E0DCE88226A424A00170740 /* ImageUrl.swift */,
 				5E0DCE83226A154E00170740 /* VirtualTourist.xcdatamodeld */,
 				5E0DCE86226A23E900170740 /* DataController.swift */,
 			);

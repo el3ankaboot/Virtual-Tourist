@@ -15,6 +15,13 @@ class ImageUrl {
     var secret: String
     
     init(farmID: Int , serverID: String , id:String , secret: String) {
-        
+        self.farmID = farmID
+        self.serverID = serverID
+        self.id = id
+        self.secret = secret
+    }
+    
+    func getURL() -> String {
+        return "https://farm\(farmID).staticflickr.com/\(serverID)/\(id)_\(secret).jpg"
     }
 }
