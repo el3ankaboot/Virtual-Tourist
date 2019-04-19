@@ -14,6 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     static var longitude : Double?
     static var latitude : Double?
+    static var longitudeDelta : Double?
+    static var latitudeDelta : Double?
 
 
 
@@ -27,6 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         UserDefaults.standard.set(AppDelegate.longitude, forKey: "Longitude")
         UserDefaults.standard.set(AppDelegate.latitude, forKey: "Latitude")
+        UserDefaults.standard.set(AppDelegate.longitudeDelta, forKey: "LongitudeDelta")
+        UserDefaults.standard.set(AppDelegate.latitudeDelta, forKey: "LatitudeDelta")
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -34,6 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         UserDefaults.standard.set(AppDelegate.longitude, forKey: "Longitude")
         UserDefaults.standard.set(AppDelegate.latitude, forKey: "Latitude")
+        UserDefaults.standard.set(AppDelegate.longitudeDelta, forKey: "LongitudeDelta")
+        UserDefaults.standard.set(AppDelegate.latitudeDelta, forKey: "LatitudeDelta")
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -48,6 +54,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         UserDefaults.standard.set(AppDelegate.longitude, forKey: "Longitude")
         UserDefaults.standard.set(AppDelegate.latitude, forKey: "Latitude")
+        UserDefaults.standard.set(AppDelegate.longitudeDelta, forKey: "LongitudeDelta")
+        UserDefaults.standard.set(AppDelegate.latitudeDelta, forKey: "LatitudeDelta")
         
     }
 

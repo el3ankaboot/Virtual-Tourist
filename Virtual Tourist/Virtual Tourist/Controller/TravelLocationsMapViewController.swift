@@ -22,26 +22,29 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
         
         if UserDefaults.standard.bool(forKey: "HasLaunchedBefore") {
             print("App has launched before")
+            
             let latDouble = UserDefaults.standard.double(forKey: "Latitude")
             let lat =  CLLocationDegrees(latDouble)
             let longDouble = UserDefaults.standard.double(forKey: "Longitude")
             let long = CLLocationDegrees(longDouble)
             let center = CLLocationCoordinate2D(latitude: lat, longitude: long)
             
-            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 20, longitudeDelta: 20))
+            let latitudeDelta = UserDefaults.standard.double(forKey: "LatitudeDelta")
+            let longitudeDelta = UserDefaults.standard.double(forKey: "LongitudeDelta")
+            
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta))
             
             self.mapView.setRegion(region, animated: true)
             
         } else {
-            let startingCoordinate = mapView.centerCoordinate
-            let latitude = startingCoordinate.latitude
-            let longitude = startingCoordinate.longitude
             print("This is the first launch ever!")
+            
             UserDefaults.standard.set(true, forKey: "HasLaunchedBefore")
-            UserDefaults.standard.set(longitude, forKey: "Longitude")
-            UserDefaults.standard.set(latitude, forKey: "Latitude")
-            UserDefaults.standard.set(0.0, forKey: "Zoom")
-            UserDefaults.standard.synchronize()
+            let center = mapView.centerCoordinate
+            AppDelegate.longitude = center.longitude
+            AppDelegate.latitude = center.latitude
+            AppDelegate.latitudeDelta = mapView.region.span.latitudeDelta
+            AppDelegate.longitudeDelta = mapView.region.span.longitudeDelta
         }
         
     }
@@ -50,6 +53,8 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
         let center = mapView.centerCoordinate
         AppDelegate.longitude = center.longitude
         AppDelegate.latitude = center.latitude
+        AppDelegate.latitudeDelta = mapView.region.span.latitudeDelta
+        AppDelegate.longitudeDelta = mapView.region.span.longitudeDelta
     }
 
     
