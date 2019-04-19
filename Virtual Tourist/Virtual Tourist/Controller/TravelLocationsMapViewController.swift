@@ -146,6 +146,7 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
         let photoAlbumVC = self.storyboard!.instantiateViewController(withIdentifier: "PhotoAlbumViewController") as! PhotoAlbumViewController
         photoAlbumVC.thePin = pin
         photoAlbumVC.dataController = self.dataController
+        mapView.deselectAnnotation(view.annotation, animated: true)
         self.navigationController!.pushViewController(photoAlbumVC, animated: true)
        
     }

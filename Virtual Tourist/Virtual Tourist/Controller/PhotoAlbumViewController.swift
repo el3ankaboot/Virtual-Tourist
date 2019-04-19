@@ -21,6 +21,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
     var photos:[Photo] = []
     var imageURLs:[ImageUrl] = []
     var pageNo = 1
+    var cellLookAtPhotos = false
     
     //MARK: Outlets
     @IBOutlet weak var collectionView: UICollectionView!
@@ -40,6 +41,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
             if result.count > 0 { //MARK: Fetching Images from Persistent Store
                 print("has images")
                 photos = result
+                cellLookAtPhotos = true
             }
             else { //MARK: Downloading Images from Flickr
                 print("has NOO images")
@@ -50,6 +52,13 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
     
     //MARK: Function to Download Images:
     func downloadImagesFromFlickr () {
+        //Delete the Core Data Saved Images
+        for photo in self.photos {
+            dataController.viewContext.delete(photo)
+        }
+        photos = []
+        try? dataController.viewContext.save()
+        cellLookAtPhotos = false
         FlickrClient.downloadImages(longitude: "\(thePin!.longitude)", latitude: "\(thePin!.latitude)", page: pageNo) { (imagesURLs, errMsg) in
             guard let imagesURLs = imagesURLs else {
                 let alertVC = UIAlertController(title: errMsg , message: "", preferredStyle: .alert)
@@ -67,7 +76,9 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
     
     //MARK: CollectionView stubs
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.imageURLs.count
+        if(!cellLookAtPhotos){return self.imageURLs.count}
+        else {return self.photos.count}
+        
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
@@ -75,31 +86,46 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
         
         cell.image.image = UIImage(named: "Unknown")
         
-        
-        let url = URL(string: imageURLs[(indexPath as NSIndexPath).row].getURL())
-        let downloadQueue = DispatchQueue(label: "download", attributes: [])
-        downloadQueue.async { () -> Void in
+        if(!cellLookAtPhotos){
+            let url = URL(string: imageURLs[(indexPath as NSIndexPath).row].getURL())
+            let downloadQueue = DispatchQueue(label: "download", attributes: [])
+            downloadQueue.async { () -> Void in
 
-            // download Data
-            if let url = url {
-                let imgData = try? Data(contentsOf: url)
-                // Turn it into a UIImage
-                if let imgData = imgData {
-                    let image = UIImage(data: imgData)
-
-                    // display it
-                    DispatchQueue.main.async(execute: { () -> Void in
-                        if let img = image {
-                            cell.image.image = img
-                        }
-                        else {
-                            print("NO")
-                        }
-                    })
+      
+                if let url = url {
+                    let imgData = try? Data(contentsOf: url)
+                    if let imgData = imgData {
+                        // CoreData
+                        let photo = Photo(context: self.dataController.viewContext)
+                        photo.data = imgData
+                        photo.pin = self.thePin
+                        try? self.dataController.viewContext.save()
+                        let image = UIImage(data: imgData)
+                        DispatchQueue.main.async(execute: { () -> Void in
+                            if let img = image {
+                                cell.image.image = img
+                            }
+                            else {
+                                print("NO")
+                            }
+                        })
+                    }
                 }
+
+
             }
-
-
+        }
+        else {
+            let data = photos[(indexPath as NSIndexPath).row]
+            let image = UIImage(data: data.data!)
+            DispatchQueue.main.async(execute: { () -> Void in
+                if let img = image {
+                    cell.image.image = img
+                }
+                else {
+                    print("NO")
+                }
+            })
         }
         
         return cell
@@ -108,6 +134,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
     //MARK: IBActions
     
     @IBAction func loadNewImages(_ sender: Any) {
+
         self.downloadImagesFromFlickr()
     }
     
