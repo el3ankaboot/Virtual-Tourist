@@ -136,6 +136,12 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
         }
         
     }
+    
+    //MARK: Navigating to photo album view controller when clicking on annotation
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView)
+    {
+       print("User tapped on annotation")
+    }
 
     
 }
