@@ -33,26 +33,42 @@ class FlickrClient {
         
     }
     
-    class func downloadImages (longitude:String, latitude: String, page: Int, completion: @escaping (Bool , String) -> Void){
+    class func downloadImages (longitude:String, latitude: String, page: Int, completion: @escaping ([ImageUrl]? , String) -> Void){
         Alamofire.request(Endpoints.search(longitude, latitude, page).url, method: .get, encoding: JSONEncoding.default, headers: [:])
             .responseJSON { response in
                 switch response.result {
                 case .success:
                     print("Success")
                 case .failure(_):
-                    completion(false,"Failed to retrieve images.")
+                    completion(nil,"Failed to retrieve images.")
                     print("Failure")
                 }
             }
             .response { response in
                 if let data = response.data {
-                    let json = JSON(data)
                     switch response.response?.statusCode {
                     case 200 :
-                       completion(true ,"")
+                        let json = JSON(data)
+                        let photos = json["photos"]
+                        let photo = photos["photo"]
+                        var imageURLs = [ImageUrl]()
+                        var returnCount = 0
+                        for p in photo {
+        
+                            let farmID = p.1["farm"].int ?? 0
+                            let serverID = p.1["server"].string ?? "1"
+                            let id = p.1["id"].string ?? "1"
+                            let secret = p.1["secret"].string ?? ""
+                            let imageUrl = ImageUrl(farmID: farmID, serverID: serverID, id: id, secret: secret)
+                            imageURLs.append(imageUrl)
+                            returnCount += 1
+                            print("\(farmID) , \(serverID), \(id) , \(secret)")
+                            if returnCount == photo.count {completion(imageURLs ,"")}
+                        }
+                        
                         
                     default :
-                        completion(false ,"Failed to retrieve images.")
+                        completion(nil ,"Failed to retrieve images.")
                     }
                     
                 }

@@ -10,7 +10,8 @@ import Foundation
 import UIKit
 import CoreData
 
-class PhotoAlbumViewController : UIViewController {
+class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , UICollectionViewDelegate {
+
     
     //MARK: Injections from TravelLocationsViewController
     var thePin: Pin!
@@ -19,9 +20,15 @@ class PhotoAlbumViewController : UIViewController {
     //MARK: Instance Variables
     var photos:[Photo] = []
     
+    //MARK: Outlets
+    @IBOutlet weak var collectionView: UICollectionView!
+    
+    
     //MARK: View did load
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView.delegate = self
+        collectionView.dataSource = self
         
         //Fetch Photos
         let fetchRequest : NSFetchRequest<Photo> = Photo.fetchRequest()
@@ -35,7 +42,7 @@ class PhotoAlbumViewController : UIViewController {
             else { //MARK: Downloading Images from Flickr
                 print("has NOO images")
                 FlickrClient.downloadImages(longitude: "\(thePin!.longitude)", latitude: "\(thePin!.latitude)", page: 1) { (success, errMsg) in
-                    guard success else {
+                    guard success != nil else {
                         let alertVC = UIAlertController(title: errMsg , message: "", preferredStyle: .alert)
                         alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                         self.present(alertVC, animated: true)
@@ -46,4 +53,21 @@ class PhotoAlbumViewController : UIViewController {
             }
         }
     }
+    
+    
+    //MARK: CollectionView stubs
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.photos.count
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageReusable", for: indexPath) as! PhotoCell
+        let photo = self.photos[(indexPath as NSIndexPath).row]
+        
+        
+        cell.image?.image = UIImage(data:photo.data!,scale:1.0)
+        
+        return cell
+    }
+    
 }

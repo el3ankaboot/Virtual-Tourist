@@ -62,13 +62,74 @@
                     <view key="view" contentMode="scaleToFill" id="aF7-3M-9bN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="uIR-hP-TJo">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="lKB-5w-OnL">
+                                    <size key="itemSize" width="100" height="100"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="imageReusable" id="vXH-pR-9Bf" customClass="PhotoCell" customModule="Virtual_Tourist" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Unknown" translatesAutoresizingMaskIntoConstraints="NO" id="f3K-44-6tZ">
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                </imageView>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="f3K-44-6tZ" secondAttribute="bottom" id="3lj-BX-g1M"/>
+                                            <constraint firstAttribute="trailing" secondItem="f3K-44-6tZ" secondAttribute="trailing" id="ATF-tJ-R9z"/>
+                                            <constraint firstItem="f3K-44-6tZ" firstAttribute="leading" secondItem="vXH-pR-9Bf" secondAttribute="leading" id="Qmw-4d-BmN"/>
+                                            <constraint firstItem="f3K-44-6tZ" firstAttribute="height" secondItem="vXH-pR-9Bf" secondAttribute="height" id="RQl-8X-quW"/>
+                                            <constraint firstItem="f3K-44-6tZ" firstAttribute="width" secondItem="vXH-pR-9Bf" secondAttribute="width" id="URu-6V-dix"/>
+                                            <constraint firstItem="f3K-44-6tZ" firstAttribute="top" secondItem="vXH-pR-9Bf" secondAttribute="top" id="rRq-gc-3qf"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <outlet property="image" destination="f3K-44-6tZ" id="d7a-ht-05F"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="uIR-hP-TJo" firstAttribute="leading" secondItem="Ujr-wv-diE" secondAttribute="leading" id="915-ft-XCG"/>
+                            <constraint firstItem="Ujr-wv-diE" firstAttribute="bottom" secondItem="uIR-hP-TJo" secondAttribute="bottom" id="BgI-ac-gBd"/>
+                            <constraint firstItem="Ujr-wv-diE" firstAttribute="trailing" secondItem="uIR-hP-TJo" secondAttribute="trailing" id="EQu-cy-FR2"/>
+                            <constraint firstItem="uIR-hP-TJo" firstAttribute="top" secondItem="Ujr-wv-diE" secondAttribute="top" id="jWR-hO-XmK"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Ujr-wv-diE"/>
                     </view>
+                    <connections>
+                        <outlet property="collectionView" destination="uIR-hP-TJo" id="0go-2n-cvh"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vsx-9y-g5j" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="964" y="27"/>
+            <point key="canvasLocation" x="964" y="26.53673163418291"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Unknown" width="221" height="228"/>
+    </resources>
 </document>
