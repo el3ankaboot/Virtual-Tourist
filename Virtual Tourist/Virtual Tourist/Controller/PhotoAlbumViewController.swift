@@ -10,5 +10,10 @@ import Foundation
 import UIKit
 
 class PhotoAlbumViewController : UIViewController {
+    var thePin: Pin!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        print(thePin)
+    }
 }

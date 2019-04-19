@@ -22,6 +22,7 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
     
     //MARK: Instance Variables
     var pins: [Pin] = []
+    var mapAnnotationToPin = [MKPointAnnotation: Pin]()
     
     //MARK: View did load
     override func viewDidLoad() {
@@ -76,6 +77,7 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
             let pinToAnnotation = MKPointAnnotation()
             pinToAnnotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
             self.mapView.addAnnotation(pinToAnnotation)
+            mapAnnotationToPin[pinToAnnotation] = pin
         }
         
     }
@@ -131,6 +133,7 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
                 pin.latitude = newCoordinate.latitude
                 try? self.dataController.viewContext.save()
                 
+                self.mapAnnotationToPin[annotation] = pin
             })
             
         }
@@ -140,7 +143,11 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
     //MARK: Navigating to photo album view controller when clicking on annotation
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView)
     {
-       print("User tapped on annotation")
+        let pin = mapAnnotationToPin[view.annotation as! MKPointAnnotation]
+        let photoAlbumVC = self.storyboard!.instantiateViewController(withIdentifier: "PhotoAlbumViewController") as! PhotoAlbumViewController
+        photoAlbumVC.thePin = pin
+        self.navigationController!.pushViewController(photoAlbumVC, animated: true)
+       
     }
 
     
