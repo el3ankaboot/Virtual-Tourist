@@ -9,11 +9,19 @@
 import Foundation
 import UIKit
 import MapKit
+import CoreData
+
 
 class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
+    
+    //MARK: DataController
+    var dataController : DataController!
 
     //MARK: Outlets
     @IBOutlet weak var mapView: MKMapView!
+    
+    //MARK: Instance Variables
+    var pins: [Pin] = []
     
     //MARK: View did load
     override func viewDidLoad() {
@@ -53,6 +61,23 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
             AppDelegate.longitudeDelta = mapView.region.span.longitudeDelta
         }
         
+        //Fetching pins and adding them as annotations on map
+        let fetchRequest : NSFetchRequest<Pin> = Pin.fetchRequest()
+        if let result = try? dataController.viewContext.fetch(fetchRequest){
+            pins = result
+            addLoadedPinsOnMap()
+        }
+        
+    }
+    
+    //MARK: Add loaded pins on map
+    func addLoadedPinsOnMap(){
+        for pin in self.pins {
+            let pinToAnnotation = MKPointAnnotation()
+            pinToAnnotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
+            self.mapView.addAnnotation(pinToAnnotation)
+        }
+        
     }
     
     //MARK: Getting the center and zoom when moving in the map
@@ -88,7 +113,7 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
             let touchPoint = gestureRecognizer.location(in: self.mapView)
             let newCoordinate = self.mapView.convert(touchPoint, toCoordinateFrom: self.mapView)
             let location = CLLocation(latitude: newCoordinate.latitude, longitude: newCoordinate.longitude)
-            CLGeocoder().reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
+            CLGeocoder().reverseGeocodeLocation(location, completionHandler: { (_, error) in
                 guard error == nil else {
                     let alertVC = UIAlertController(title: "Couldn't add location", message: "(An error occured and location was not added.", preferredStyle: .alert)
                     alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -99,6 +124,12 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = newCoordinate
                 self.mapView.addAnnotation(annotation)
+                
+                //Add it to context
+                let pin = Pin(context: self.dataController.viewContext)
+                pin.longitude = newCoordinate.longitude
+                pin.latitude = newCoordinate.latitude
+                try? self.dataController.viewContext.save()
                 
             })
             

@@ -17,10 +17,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static var longitudeDelta : Double?
     static var latitudeDelta : Double?
 
+    let dataController = DataController(modelName: "VirtualTourist")
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        dataController.load()
+        
+        let navigationController = window?.rootViewController as! UINavigationController
+        let travelLocationsMapViewController = navigationController.topViewController as! TravelLocationsMapViewController
+        travelLocationsMapViewController.dataController = dataController
         return true
     }
 

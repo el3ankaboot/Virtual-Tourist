@@ -15,6 +15,7 @@
 		5E0664B72260D1F3006BD894 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E0664B62260D1F3006BD894 /* PhotoAlbumViewController.swift */; };
 		5E0664BE2260D2BA006BD894 /* FlickrClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E0664BD2260D2BA006BD894 /* FlickrClient.swift */; };
 		5E0DCE85226A154E00170740 /* VirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5E0DCE83226A154E00170740 /* VirtualTourist.xcdatamodeld */; };
+		5E0DCE87226A23E900170740 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E0DCE86226A23E900170740 /* DataController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		5E0664B62260D1F3006BD894 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		5E0664BD2260D2BA006BD894 /* FlickrClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrClient.swift; sourceTree = "<group>"; };
 		5E0DCE84226A154E00170740 /* VirtualTourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VirtualTourist.xcdatamodel; sourceTree = "<group>"; };
+		5E0DCE86226A23E900170740 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				5E0664A42260D184006BD894 /* AppDelegate.swift */,
 				5E0664BD2260D2BA006BD894 /* FlickrClient.swift */,
 				5E0DCE83226A154E00170740 /* VirtualTourist.xcdatamodeld */,
+				5E0DCE86226A23E900170740 /* DataController.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -169,6 +172,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E0664A72260D184006BD894 /* TravelLocationsMapViewController.swift in Sources */,
+				5E0DCE87226A23E900170740 /* DataController.swift in Sources */,
 				5E0DCE85226A154E00170740 /* VirtualTourist.xcdatamodeld in Sources */,
 				5E0664A52260D184006BD894 /* AppDelegate.swift in Sources */,
 				5E0664B72260D1F3006BD894 /* PhotoAlbumViewController.swift in Sources */,
