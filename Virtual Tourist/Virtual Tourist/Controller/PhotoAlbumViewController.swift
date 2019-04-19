@@ -8,12 +8,33 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class PhotoAlbumViewController : UIViewController {
-    var thePin: Pin!
     
+    //MARK: Injections from TravelLocationsViewController
+    var thePin: Pin!
+    var dataController : DataController!
+    
+    //MARK: Instance Variables
+    var photos:[Photo] = []
+    
+    //MARK: View did load
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(thePin)
+        
+        //Fetch Photos
+        let fetchRequest : NSFetchRequest<Photo> = Photo.fetchRequest()
+        let predicate = NSPredicate(format: "pin == %@", thePin)
+        fetchRequest.predicate = predicate
+        if let result = try? dataController.viewContext.fetch(fetchRequest) {
+            if result.count > 0 { //MARK: Fetching Images from Persistent Store
+                print("has images")
+                photos = result
+            }
+            else { //MARK: Downloading Images from Flickr
+                print("has NOO images")
+            }
+        }
     }
 }
