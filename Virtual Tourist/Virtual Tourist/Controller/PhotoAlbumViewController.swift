@@ -34,6 +34,15 @@ class PhotoAlbumViewController : UIViewController {
             }
             else { //MARK: Downloading Images from Flickr
                 print("has NOO images")
+                FlickrClient.downloadImages(longitude: "\(thePin!.longitude)", latitude: "\(thePin!.latitude)", page: 1) { (success, errMsg) in
+                    guard success else {
+                        let alertVC = UIAlertController(title: errMsg , message: "", preferredStyle: .alert)
+                        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alertVC, animated: true)
+                        return
+                    }
+                  print("Loaded Images")
+                }
             }
         }
     }

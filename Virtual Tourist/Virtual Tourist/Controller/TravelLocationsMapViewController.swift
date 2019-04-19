@@ -132,7 +132,6 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
                 pin.longitude = newCoordinate.longitude
                 pin.latitude = newCoordinate.latitude
                 try? self.dataController.viewContext.save()
-                
                 self.mapAnnotationToPin[annotation] = pin
             })
             
