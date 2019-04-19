@@ -39,12 +39,10 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
         fetchRequest.predicate = predicate
         if let result = try? dataController.viewContext.fetch(fetchRequest) {
             if result.count > 0 { //MARK: Fetching Images from Persistent Store
-                print("has images")
                 photos = result
                 cellLookAtPhotos = true
             }
             else { //MARK: Downloading Images from Flickr
-                print("has NOO images")
                 downloadImagesFromFlickr()
             }
         }
@@ -66,7 +64,6 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
                 self.present(alertVC, animated: true)
                 return
             }
-            print("Loaded Images")
             self.imageURLs = imagesURLs
             self.pageNo += 1
             self.collectionView.reloadData()
@@ -106,9 +103,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
                             if let img = image {
                                 cell.image.image = img
                             }
-                            else {
-                                print("NO")
-                            }
+                            
                         })
                     }
                 }
@@ -123,23 +118,21 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
                 if let img = image {
                     cell.image.image = img
                 }
-                else {
-                    print("NO")
-                }
+                
             })
         }
         
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath:IndexPath) {
-        
-        print((indexPath as NSIndexPath).row)
+        //MARK: Deleting photo by clicking on it
         let alertVC = UIAlertController(title: "Are You sure you want to delete this image ?", message: "", preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
         alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alertVC] (_) in
             let photoToRemove = self.photos.remove(at: (indexPath as NSIndexPath).row)
             self.dataController.viewContext.delete(photoToRemove)
             try? self.dataController.viewContext.save()
+            self.cellLookAtPhotos = true
             collectionView.reloadData()
             
         }))

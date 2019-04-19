@@ -36,8 +36,7 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
 
         //Adding UserDefaults Persistence to presist the center and zoom of the map.
         if UserDefaults.standard.bool(forKey: "HasLaunchedBefore") {
-            print("App has launched before")
-            
+
             let latDouble = UserDefaults.standard.double(forKey: "Latitude")
             let lat =  CLLocationDegrees(latDouble)
             let longDouble = UserDefaults.standard.double(forKey: "Longitude")
@@ -52,8 +51,7 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
             self.mapView.setRegion(region, animated: true)
             
         } else {
-            print("This is the first launch ever!")
-            
+ 
             UserDefaults.standard.set(true, forKey: "HasLaunchedBefore")
             let center = mapView.centerCoordinate
             AppDelegate.longitude = center.longitude

@@ -62,7 +62,6 @@ class FlickrClient {
                             let imageUrl = ImageUrl(farmID: farmID, serverID: serverID, id: id, secret: secret)
                             imageURLs.append(imageUrl)
                             returnCount += 1
-                            print("\(farmID) , \(serverID), \(id) , \(secret)")
                             if returnCount == photo.count {completion(imageURLs ,"")}
                         }
                         
