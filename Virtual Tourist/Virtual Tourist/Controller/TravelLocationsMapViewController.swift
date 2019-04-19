@@ -20,6 +20,12 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
         super.viewDidLoad()
         self.mapView.delegate = self
         
+        //Adding gesture recognizer with action to add the annotation
+        let tapRecognize = UILongPressGestureRecognizer(target: self, action: #selector(addAnnotation(gestureRecognizer:)))
+        tapRecognize.minimumPressDuration = 1
+        mapView.addGestureRecognizer(tapRecognize)
+
+        //Adding UserDefaults Persistence to presist the center and zoom of the map.
         if UserDefaults.standard.bool(forKey: "HasLaunchedBefore") {
             print("App has launched before")
             
@@ -49,12 +55,55 @@ class TravelLocationsMapViewController: UIViewController , MKMapViewDelegate {
         
     }
     
+    //MARK: Getting the center and zoom when moving in the map
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let center = mapView.centerCoordinate
         AppDelegate.longitude = center.longitude
         AppDelegate.latitude = center.latitude
         AppDelegate.latitudeDelta = mapView.region.span.latitudeDelta
         AppDelegate.longitudeDelta = mapView.region.span.longitudeDelta
+    }
+    
+    //MARK: Displaying Annotations
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard annotation is MKPointAnnotation else { return nil }
+        
+        let identifier = "Annotation"
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+        
+        if annotationView == nil {
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            annotationView!.canShowCallout = true
+        } else {
+            annotationView!.annotation = annotation
+        }
+        
+        return annotationView
+    }
+    
+    //MARK: The Gesture Recognizer that drops the pin.
+    @objc func addAnnotation(gestureRecognizer: UIGestureRecognizer) {
+        
+        if gestureRecognizer.state == UIGestureRecognizer.State.began {
+            let touchPoint = gestureRecognizer.location(in: self.mapView)
+            let newCoordinate = self.mapView.convert(touchPoint, toCoordinateFrom: self.mapView)
+            let location = CLLocation(latitude: newCoordinate.latitude, longitude: newCoordinate.longitude)
+            CLGeocoder().reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
+                guard error == nil else {
+                    let alertVC = UIAlertController(title: "Couldn't add location", message: "(An error occured and location was not added.", preferredStyle: .alert)
+                    alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    
+                    self.present(alertVC ,animated: true, completion: nil)
+                    return
+                }
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = newCoordinate
+                self.mapView.addAnnotation(annotation)
+                
+            })
+            
+        }
+        
     }
 
     
