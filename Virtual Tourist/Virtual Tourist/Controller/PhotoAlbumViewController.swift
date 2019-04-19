@@ -99,6 +99,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
                         let photo = Photo(context: self.dataController.viewContext)
                         photo.data = imgData
                         photo.pin = self.thePin
+                        self.photos.append(photo)
                         try? self.dataController.viewContext.save()
                         let image = UIImage(data: imgData)
                         DispatchQueue.main.async(execute: { () -> Void in
@@ -130,6 +131,21 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource , 
         
         return cell
     }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath:IndexPath) {
+        
+        print((indexPath as NSIndexPath).row)
+        let alertVC = UIAlertController(title: "Are You sure you want to delete this image ?", message: "", preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alertVC] (_) in
+            let photoToRemove = self.photos.remove(at: (indexPath as NSIndexPath).row)
+            self.dataController.viewContext.delete(photoToRemove)
+            try? self.dataController.viewContext.save()
+            collectionView.reloadData()
+            
+        }))
+        self.present(alertVC, animated: true)
+    }
+
     
     //MARK: IBActions
     
